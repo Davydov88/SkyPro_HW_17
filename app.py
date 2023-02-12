@@ -57,7 +57,7 @@ movie_ns = api.namespace('movies')
 
 @movie_ns.route('/')
 class MovieView(Resource):
-    def get_movie(self):
+    def get(self):
         director_id = request.args.get('director_id')
         genre_id = request.args.get('genre_id')
         stmt = Movie.query
@@ -69,7 +69,7 @@ class MovieView(Resource):
         return movie_schema.dump(movies, many=True), 200
 
 
-    def post_movie(self):
+    def post(self):
         movie_data = request.json
         new_movie = Movie(**movie_data)
         db.session.add(new_movie)
@@ -79,14 +79,14 @@ class MovieView(Resource):
 
 @movie_ns.route('/<int:mid>')
 class MovieView(Resource):
-    def get_movie_by_id(self, mid: int):    # mid - movie id
+    def get(self, mid: int):    # mid - movie id
         movie = Movie.query.get(mid)
         if not movie:
             return '', 404
         return movie_schema.dump(movie), 200
 
 
-    def put_movie_by_id(self, mid:int):
+    def put(self, mid:int):
         movie = Movie.query.get(mid)
         if not movie:
             return '', 404
@@ -105,7 +105,7 @@ class MovieView(Resource):
         return '', 204
 
 
-    def delete_movie(self, mid: int):
+    def delete(self, mid: int):
         movie = Movie.query.get(mid)
         if not movie:
             return '', 404
